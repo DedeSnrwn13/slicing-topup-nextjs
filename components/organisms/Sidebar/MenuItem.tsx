@@ -7,11 +7,11 @@ interface MenuItemProps {
   icon:
     | 'menu-overview'
     | 'menu-transactions'
-    | 'icon-logout'
-    | 'icon-settings'
-    | 'icon-card'
-    | 'icon-rewards'
-    | 'icon-messages';
+    | 'menu-logout'
+    | 'menu-settings'
+    | 'menu-card'
+    | 'menu-rewards'
+    | 'menu-messages';
   active?: boolean;
   href: string;
 }
