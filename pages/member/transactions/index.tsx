@@ -1,5 +1,5 @@
-import Sidebar from './../../../components/organisms/Sidebar/Index';
-import TransactionContent from './../../../components/organisms/TransactionContent/Index';
+import Sidebar from '../../../components/organisms/Sidebar/Index';
+import TransactionContent from '../../../components/organisms/TransactionContent/Index';
 
 export default function Transactions() {
   return (
@@ -8,4 +8,29 @@ export default function Transactions() {
       <TransactionContent />
     </section>
   );
+}
+
+interface GetServerSideProps {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+}
+
+export async function getServerSideProps({ req }: GetServerSideProps) {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

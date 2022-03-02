@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import CX from 'classnames';
+import NumberFormat from 'react-number-format';
 
 interface TableRowProps {
   image: string;
@@ -7,16 +8,17 @@ interface TableRowProps {
   category: string;
   item: number;
   price: number;
-  status: 'Pending' | 'Success' | 'Failed';
+  status: string;
+  id: string;
 }
 
 export default function TableRow(props: TableRowProps) {
-  const { image, title, category, item, price, status } = props;
+  const { image, title, category, item, price, status, id } = props;
   const statusClass = CX({
     'float-start icon-status': true,
-    success: status === 'Success',
-    pending: status === 'Pending',
-    failed: status === 'Failed',
+    success: status === 'success',
+    pending: status === 'pending',
+    failed: status === 'failed',
   });
 
   return (
@@ -24,7 +26,7 @@ export default function TableRow(props: TableRowProps) {
       <th scope="row">
         <img
           className="float-start me-3 mb-lg-0 mb-3"
-          src={`/img/${image}.png`}
+          src={image}
           width="80"
           height="60"
           alt=""
@@ -39,21 +41,29 @@ export default function TableRow(props: TableRowProps) {
         </div>
       </th>
       <td>
-        <p className="fw-medium color-palette-1 m-0">{item} Gold</p>
+        <p className="fw-medium color-palette-1 m-0">{item}</p>
       </td>
       <td>
-        <p className="fw-medium color-palette-1 m-0">Rp {price}</p>
+        <p className="fw-medium color-palette-1 m-0">
+          <NumberFormat
+            value={price}
+            prefix="Rp. "
+            displayType="text"
+            thousandSeparator="."
+            decimalSeparator=","
+          />
+        </p>
       </td>
       <td>
         <div>
-          <span className={statusClass}></span>
+          <span className={statusClass} />
           <p className="fw-medium text-start color-palette-1 m-0 position-relative">
             {status}
           </p>
         </div>
       </td>
       <td>
-        <Link href="/member/transactions/detail">
+        <Link href={`/member/transactions/${id}`}>
           <a className="btn btn-status rounded-pill text-sm">Details</a>
         </Link>
       </td>

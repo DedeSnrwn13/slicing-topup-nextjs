@@ -1,8 +1,10 @@
-import CheckoutItem from './../components/organisms/CheckoutItem/Index';
-import CheckoutDetail from './../components/organisms/CheckoutDetail/Index';
-import CheckoutConfirmation from '../components/organisms/CheckoutConfirmation/Index';
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
+import jwtDecode from "jwt-decode";
+import { UserTypes, JWTPayloadTypes } from "../services/data-types/index";
+import CheckoutItem from "../components/organisms/CheckoutItem/Index";
+import CheckoutDetail from "../components/organisms/CheckoutDetail/Index";
+import CheckoutConfirmation from "../components/organisms/CheckoutConfirmation/Index";
 
 export default function Checkout() {
   return (
@@ -29,4 +31,35 @@ export default function Checkout() {
       </div>
     </section>
   );
+}
+
+interface GetServerSideProps {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+}
+
+export async function getServerSideProps({ req }: GetServerSideProps) {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/sign-in",
+        permanent: false,
+      },
+    };
+  }
+
+  const jwtToken = Buffer.from(token, "base64").toString("ascii");
+  const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+  const userFromPayload: UserTypes = payload.player;
+  const IMG = process.env.NEXT_PUBLIC_IMG;
+  userFromPayload.avatar = `${IMG}/${userFromPayload.avatar}`;
+
+  return {
+    props: {},
+  };
 }

@@ -1,4 +1,4 @@
-import StepItem from './../../molecules/StepItem/Index';
+import StepItem from '../../molecules/StepItem/Index';
 
 export default function TransactionStep() {
   return (
